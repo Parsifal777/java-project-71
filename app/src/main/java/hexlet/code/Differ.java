@@ -1,56 +1,59 @@
 package hexlet.code;
 
+import hexlet.code.JsonFormatter;
+import hexlet.code.PlainFormatter;
+import hexlet.code.StylishFormatter;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.TreeMap;
+import java.util.Objects;
 
 public class Differ {
-    public static String generate(Map<String, Object> data1, Map<String, Object> data2, String format) {
+    public static String generate(String filePath1, String filePath2) throws Exception {
+        return generate(filePath1, filePath2, "stylish");
+    }
+
+    public static String generate(String filePath1, String filePath2, String format) throws Exception {
+        Map<String, Object> map1 = FileReader.readAndParse(filePath1);
+        Map<String, Object> map2 = FileReader.readAndParse(filePath2);
+        return generate(map1, map2, format);
+    }
+
+    public static String generate(Map<String, Object> map1, Map<String, Object> map2, String format) {
+        Map<String, DiffNode> diff = generateDiff(map1, map2);
+
         switch (format) {
-            case "plain":
-                return generatePlain(data1, data2);
             case "json":
-                return generateJson(data1, data2);
+                return JsonFormatter.format(diff);
+            case "plain":
+                return PlainFormatter.format(diff);
             case "stylish":
+                return StylishFormatter.format(diff);
             default:
-                return generateStylish(data1, data2);
+                throw new IllegalArgumentException("Unsupported format: " + format);
         }
     }
 
-    private static String generateStylish(Map<String, Object> data1, Map<String, Object> data2) {
-        StringBuilder result = new StringBuilder("{\n");
-        Set<String> allKeys = new HashSet<>(data1.keySet());
-        allKeys.addAll(data2.keySet());
+    private static Map<String, DiffNode> generateDiff(Map<String, Object> map1, Map<String, Object> map2) {
+        Set<String> allKeys = new HashSet<>();
+        allKeys.addAll(map1.keySet());
+        allKeys.addAll(map2.keySet());
 
-        for (String key : new TreeMap<>(data1).keySet()) {
-            if (!data2.containsKey(key)) {
-                result.append("  - ").append(key).append(": ").append(data1.get(key)).append("\n");
-            } else if (!data1.get(key).equals(data2.get(key))) {
-                result.append("  - ").append(key).append(": ").append(data1.get(key)).append("\n");
-                result.append("  + ").append(key).append(": ").append(data2.get(key)).append("\n");
+        Map<String, DiffNode> diff = new TreeMap<>();
+
+        for (String key : allKeys) {
+            if (!map2.containsKey(key)) {
+                diff.put(key, new DiffNode(DiffStatus.REMOVED, map1.get(key), null));
+            } else if (!map1.containsKey(key)) {
+                diff.put(key, new DiffNode(DiffStatus.ADDED, null, map2.get(key)));
+            } else if (!Objects.equals(map1.get(key), map2.get(key))) {
+                diff.put(key, new DiffNode(DiffStatus.CHANGED, map1.get(key), map2.get(key)));
             } else {
-                result.append("    ").append(key).append(": ").append(data1.get(key)).append("\n");
+                diff.put(key, new DiffNode(DiffStatus.UNCHANGED, map1.get(key), map2.get(key)));
             }
         }
 
-        for (String key : new TreeMap<>(data2).keySet()) {
-            if (!data1.containsKey(key)) {
-                result.append("  + ").append(key).append(": ").append(data2.get(key)).append("\n");
-            }
-        }
-
-        result.append("}");
-        return result.toString();
-    }
-
-    private static String generatePlain(Map<String, Object> data1, Map<String, Object> data2) {
-        StringBuilder result = new StringBuilder();
-        return result.toString();
-    }
-
-    private static String generateJson(Map<String, Object> data1, Map<String, Object> data2) {
-        StringBuilder result = new StringBuilder();
-        return result.toString();
+        return diff;
     }
 }
