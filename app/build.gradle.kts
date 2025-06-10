@@ -3,7 +3,7 @@ plugins {
     application
     id("checkstyle")
     id("jacoco")
-    id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "6.2.0.5505"
 }
 
 group = "hexlet.code"
@@ -36,9 +36,9 @@ tasks.jacocoTestReport {
     }
 }
 
-sonarqube {
+sonar {
     properties {
-        property("sonar.projectKey", "Parsifal777_java-project-61")
+        property("sonar.projectKey", "Parsifal777_java-project-71")
         property("sonar.organization", "parsifal777")
         property("sonar.host.url", "https://sonarcloud.io")
     }
