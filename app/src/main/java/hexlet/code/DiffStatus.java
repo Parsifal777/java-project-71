@@ -1,5 +1,8 @@
 package hexlet.code;
 
 public enum DiffStatus {
-    ADDED, REMOVED, CHANGED, UNCHANGED
+    ADDED,
+    REMOVED,
+    CHANGED,
+    UNCHANGED
 }
