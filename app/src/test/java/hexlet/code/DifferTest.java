@@ -10,28 +10,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DifferTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final String RESOURCES_DIR = "src/test/resources/";
 
     @Test
     public void testJsonCompare() throws Exception {
         Map<String, Object> map1 = readJson("file1.json");
         Map<String, Object> map2 = readJson("file2.json");
-
-        String expected = """
-            {
-              - follow: false
-                host: hexlet.io
-              - proxy: 123.234.53.22
-              - timeout: 50
-              + timeout: 20
-              + verbose: true
-            }
-            """.trim();
+        String expected = readFixture("expected_stylish.txt");
 
         assertEquals(expected, Differ.generate(map1, map2, "stylish"));
     }
 
     private Map<String, Object> readJson(String fileName) throws Exception {
-        String content = Files.readString(Paths.get("src", "test", "resources", fileName));
+        String content = Files.readString(Paths.get(RESOURCES_DIR + fileName));
         return OBJECT_MAPPER.readValue(content, Map.class);
+    }
+
+    private String readFixture(String fileName) throws Exception {
+        return Files.readString(Paths.get(RESOURCES_DIR + fileName)).trim();
     }
 }
