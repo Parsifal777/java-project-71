@@ -13,13 +13,4 @@ public class FileUtils {
         }
         return Files.readString(path);
     }
-
-    public static String getFormat(String filePath) {
-        if (filePath.toLowerCase().endsWith(".json")) {
-            return "json";
-        } else if (filePath.toLowerCase().endsWith(".yml") || filePath.toLowerCase().endsWith(".yaml")) {
-            return "yaml";
-        }
-        throw new IllegalArgumentException("Unknown file format: " + filePath);
-    }
 }

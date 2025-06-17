@@ -1,6 +1,5 @@
 package hexlet.code;
 
-import hexlet.code.DiffStatus;
 import java.util.Map;
 
 public class PlainFormatter {

@@ -1,4 +1,3 @@
-# filepath2.yml
 timeout: 20
 verbose: true
 host: hexlet.io
