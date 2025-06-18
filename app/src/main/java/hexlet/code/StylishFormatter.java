@@ -9,8 +9,13 @@ public class StylishFormatter {
         for (Map.Entry<String, DiffNode> entry : diff.entrySet()) {
             String key = entry.getKey();
             DiffNode node = entry.getValue();
+            DiffStatus status = node.getStatus();
 
-            switch (node.getStatus()) {
+            if (status == null) {
+                throw new IllegalStateException("DiffNode status cannot be null for key: " + key);
+            }
+
+            switch (status) {
                 case ADDED:
                     result.append(formatLine("+ ", key, node.getNewValue()));
                     break;
@@ -24,6 +29,8 @@ public class StylishFormatter {
                 case UNCHANGED:
                     result.append(formatLine("  ", key, node.getOldValue()));
                     break;
+                default:
+                    throw new IllegalStateException("Unknown status: " + status);
             }
         }
 
