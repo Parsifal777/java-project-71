@@ -1,43 +1,48 @@
 package hexlet.code;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
 
-class DiffBuilder {
-    public static Map<String, DiffNode> build(Map<String, Object> data1, Map<String, Object> data2) {
-        Objects.requireNonNull(data1, "First data map cannot be null");
-        Objects.requireNonNull(data2, "Second data map cannot be null");
-
+public class DiffBuilder {
+    public static Map<String, DiffNode> build(Map<String, Object> map1, Map<String, Object> map2) {
         Map<String, DiffNode> diff = new TreeMap<>();
-        Set<String> allKeys = new TreeSet<>();
 
-        allKeys.addAll(data1.keySet());
-        allKeys.addAll(data2.keySet());
+        // Get all unique keys from both maps
+        var allKeys = new ArrayList<String>();
+        allKeys.addAll(map1.keySet());
+        allKeys.addAll(map2.keySet());
 
         for (String key : allKeys) {
-            Object value1 = data1.get(key);
-            Object value2 = data2.get(key);
+            boolean inFirst = map1.containsKey(key);
+            boolean inSecond = map2.containsKey(key);
 
-            if (!data1.containsKey(key)) {
-                diff.put(key, new DiffNode(DiffStatus.ADDED, null, value2));
-            } else if (!data2.containsKey(key)) {
-                diff.put(key, new DiffNode(DiffStatus.REMOVED, value1, null));
-            } else if (deepEquals(value1, value2)) {
-                diff.put(key, new DiffNode(DiffStatus.UNCHANGED, value1, value2));
+            if (inFirst && inSecond) {
+                Object value1 = map1.get(key);
+                Object value2 = map2.get(key);
+
+                if (isEqual(value1, value2)) {
+                    diff.put(key, new DiffNode(DiffStatus.UNCHANGED, value1));
+                } else {
+                    diff.put(key, new DiffNode(DiffStatus.CHANGED, value1, value2));
+                }
+            } else if (inFirst) {
+                diff.put(key, new DiffNode(DiffStatus.REMOVED, map1.get(key)));
             } else {
-                diff.put(key, new DiffNode(DiffStatus.CHANGED, value1, value2));
+                diff.put(key, new DiffNode(DiffStatus.ADDED, map2.get(key)));
             }
         }
 
         return diff;
     }
 
-    private static boolean deepEquals(Object a, Object b) {
-        if (a == b) return true;
-        if (a == null || b == null) return false;
-        return Objects.deepEquals(a, b);
+    private static boolean isEqual(Object value1, Object value2) {
+        if (value1 == null && value2 == null) {
+            return true;
+        }
+        if (value1 == null || value2 == null) {
+            return false;
+        }
+        return value1.equals(value2);
     }
 }

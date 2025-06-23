@@ -1,23 +1,20 @@
 package hexlet.code;
 
 public class DiffNode {
-    private DiffStatus status = null;
+    private final DiffStatus status;
     private final Object oldValue;
     private final Object newValue;
-    private final Object value;
 
-    public DiffNode(DiffStatus status, String type, Object value) {
-        this.status = status;
-        this.value = value;
-        this.oldValue = null;
-        this.newValue = null;
-    }
-
+    // Основной конструктор для всех случаев
     public DiffNode(DiffStatus status, Object oldValue, Object newValue) {
         this.status = status;
         this.oldValue = oldValue;
         this.newValue = newValue;
-        this.value = null;
+    }
+
+    // Упрощенный конструктор для ADDED/REMOVED/UNCHANGED
+    public DiffNode(DiffStatus status, Object value) {
+        this(status, value, value);
     }
 
     public DiffStatus getStatus() {
@@ -32,7 +29,18 @@ public class DiffNode {
         return newValue;
     }
 
+    // Универсальный метод получения значения
     public Object getValue() {
-        return value;
+        return switch (status) {
+            case ADDED -> newValue;
+            case REMOVED -> oldValue;
+            case UNCHANGED -> oldValue;  // или newValue - они равны
+            case CHANGED -> throw new IllegalStateException("Для CHANGED используйте getOldValue()/getNewValue()");
+        };
+    }
+
+    // Вспомогательный метод для проверки статуса
+    public boolean is(DiffStatus status) {
+        return this.status == status;
     }
 }
