@@ -1,7 +1,6 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class DiffNode {
     private final DiffStatus status;
