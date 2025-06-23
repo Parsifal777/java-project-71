@@ -51,7 +51,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
     implementation("info.picocli:picocli:4.7.4")
     annotationProcessor("info.picocli:picocli-codegen:4.7.4")
-
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
