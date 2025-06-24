@@ -3,6 +3,7 @@ package hexlet.code;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DiffBuilder {
     public static Map<String, DiffNode> build(Map<String, Object> map1, Map<String, Object> map2) {
@@ -21,7 +22,7 @@ public class DiffBuilder {
                 Object value1 = map1.get(key);
                 Object value2 = map2.get(key);
 
-                if (isEqual(value1, value2)) {
+                if (Objects.equals(value1, value2)) {
                     diff.put(key, new DiffNode(DiffStatus.UNCHANGED, value1));
                 } else {
                     diff.put(key, new DiffNode(DiffStatus.CHANGED, value1, value2));
@@ -34,15 +35,5 @@ public class DiffBuilder {
         }
 
         return diff;
-    }
-
-    private static boolean isEqual(Object value1, Object value2) {
-        if (value1 == null && value2 == null) {
-            return true;
-        }
-        if (value1 == null || value2 == null) {
-            return false;
-        }
-        return value1.equals(value2);
     }
 }
