@@ -6,3 +6,4 @@
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Parsifal777_java-project-71&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Parsifal777_java-project-71)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Parsifal777_java-project-71&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Parsifal777_java-project-71)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Parsifal777_java-project-71&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Parsifal777_java-project-71)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Parsifal777_java-project-71&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Parsifal777_java-project-71)
